@@ -61,12 +61,11 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, PermissionsListene
                 )
                 if (!addressList.isEmpty()) {
 
-//                    get address from here
-//                    Toast.makeText(
-//                        this@MainActivity,
-//                        addressList[0]!!.getAddressLine(0),
-//                        Toast.LENGTH_SHORT
-//                    ).show()
+                    Toast.makeText(
+                        this@MainActivity,
+                        addressList[0]!!.getAddressLine(0),
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
         }
