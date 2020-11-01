@@ -2,6 +2,7 @@ package com.coxtunes.mapbox
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.location.Address
 import android.location.LocationManager
 import android.os.Bundle
@@ -9,8 +10,6 @@ import android.provider.Settings
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.location.*
-import com.google.gson.JsonArray
-import com.google.gson.JsonObject
 import com.mapbox.android.core.permissions.PermissionsListener
 import com.mapbox.android.core.permissions.PermissionsManager
 import com.mapbox.api.geocoding.v5.models.CarmenFeature
@@ -25,11 +24,11 @@ import com.mapbox.mapboxsdk.maps.MapView
 import com.mapbox.mapboxsdk.maps.MapboxMap
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback
 import com.mapbox.mapboxsdk.maps.Style
+import com.mapbox.mapboxsdk.plugins.annotation.SymbolManager
+import com.mapbox.mapboxsdk.plugins.annotation.SymbolOptions
 import com.mapbox.mapboxsdk.plugins.places.picker.PlacePicker
 import com.mapbox.mapboxsdk.plugins.places.picker.model.PlacePickerOptions
 import kotlinx.android.synthetic.main.activity_main.*
-import org.json.JSONException
-import org.json.JSONObject
 
 
 class MainActivity : AppCompatActivity(), OnMapReadyCallback, PermissionsListener {
@@ -145,7 +144,19 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, PermissionsListene
         this.mapboxMap = mapboxMap
         mapboxMap.setStyle(Style.Builder().fromUri("mapbox://styles/mapbox/streets-v11")) { style: Style? ->
             enableLocationComponent(style!!)
+
+            val symbolManager = SymbolManager(mapView!!, mapboxMap, style)
+            symbolManager.iconAllowOverlap = true
+            style.addImage("myMarker", BitmapFactory.decodeResource(resources, R.drawable.location))
+            symbolManager.create(
+                SymbolOptions()
+                    .withLatLng(LatLng(21.476682, 91.991548))
+                    .withIconImage("myMarker")
+                    .withTextField("jelelelel")
+            )
         }
+//        val latLng = LatLng(21.476682,91.991548)
+//        mapboxMap.addMarker(MarkerOptions().position(latLng).title("MY HOME"))
     }
 
     override fun onExplanationNeeded(permissionsToExplain: MutableList<String>?) {
@@ -207,4 +218,5 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, PermissionsListene
         super.onDestroy()
         mapView?.onDestroy()
     }
+
 }
